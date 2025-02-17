@@ -1,12 +1,28 @@
+import Blockchain from "../blockchain/Blockchain";
+import Transaction from "../blockchain/Transaction";
 import P2PNetwork from "../network/P2PNetwork";
 
-const server1 = new P2PNetwork();
-server1.startServer(5010);
+const blockchain1 = new Blockchain();
+const network1 = new P2PNetwork(blockchain1);
+network1.startServer(5010);
 
-const server2 = new P2PNetwork();
-server2.startServer(5020);
+const blockchain2 = new Blockchain();
+const network2 = new P2PNetwork(blockchain2);
+network2.startServer(5020);
 
 setTimeout(() => {
-  server1.connectToPeer("ws://localhost:5020");
-  server2.connectToPeer("ws://localhost:5010");
+  network1.connectToPeer("ws://localhost:5020");
+
+  const tx1 = new Transaction("Alice", "Bob", 100);
+  blockchain1.addTransaction(tx1);
+
+  console.log("Node 1: Mining new block...");
+  blockchain1.minePendingTransactions("Miner1");
+
+  network1.broadcastChain();
+
+  setTimeout(() => {
+    console.log("Node 2: Chain after synchronization:");
+    console.log(JSON.stringify(blockchain2.chain, null, 2));
+  }, 2000);
 }, 1000);
