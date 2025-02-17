@@ -34,6 +34,17 @@ class Block {
       )
       .digest("hex");
   }
+
+  mineBlock(difficulty: number): void {
+    const target = Array(difficulty + 1).join("0");
+
+    while (!this.hash.startsWith(target)) {
+      this.nonce++;
+      this.hash = this.calculateHash();
+    }
+
+    console.log(`Block mined: ${this.hash}`);
+  }
 }
 
 export default Block;
