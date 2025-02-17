@@ -1,10 +1,10 @@
 class Transaction {
-  sender: string;
+  sender: string | null;
   receiver: string;
   amount: number;
   timestamp: string;
 
-  constructor(sender: string, receiver: string, amount: number) {
+  constructor(sender: string | null, receiver: string, amount: number) {
     this.sender = sender;
     this.receiver = receiver;
     this.amount = amount;

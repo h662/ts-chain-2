@@ -1,10 +1,17 @@
 import Block from "./Block";
+import Transaction from "./Transaction";
 
 class Blockchain {
   chain: Block[];
+  difficulty: number;
+  transactionPool: Transaction[];
+  miningReward: number;
 
   constructor() {
     this.chain = [this.createGenesisBlock()];
+    this.difficulty = 3;
+    this.transactionPool = [];
+    this.miningReward = 50;
   }
 
   private createGenesisBlock(): Block {
@@ -15,10 +22,42 @@ class Blockchain {
     return this.chain[this.chain.length - 1];
   }
 
-  addBlock(newBlock: Block): void {
-    newBlock.previousHash = this.getLatestBlock().hash;
-    newBlock.hash = newBlock.calculateHash();
+  addTransaction(transaction: Transaction): void {
+    this.transactionPool.push(transaction);
+  }
+
+  minePendingTransactions(minerAddress: string): void {
+    const rewardTransaction = new Transaction(
+      null,
+      minerAddress,
+      this.miningReward
+    );
+    this.transactionPool.push(rewardTransaction);
+
+    const newBlock = new Block(
+      this.chain.length,
+      this.transactionPool,
+      this.getLatestBlock().hash
+    );
+
+    console.log("Mining new block...");
+    newBlock.mineBlock(this.difficulty);
+
     this.chain.push(newBlock);
+    this.transactionPool = [];
+  }
+
+  getBalanceOfAddress(address: string): number {
+    let balance = 0;
+
+    for (const block of this.chain) {
+      for (const transaction of block.transactions) {
+        if (transaction.sender === address) balance -= transaction.amount;
+        if (transaction.receiver === address) balance += transaction.amount;
+      }
+    }
+
+    return balance;
   }
 
   isChainValid(): boolean {
