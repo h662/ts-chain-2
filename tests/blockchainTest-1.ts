@@ -3,8 +3,10 @@ import Block from "../blockchain/Block";
 
 const myBlockchain = new Blockchain();
 
-console.log("Initial chain validity:", myBlockchain.isChainValid());
+console.log("Create Genesis Block...");
+console.log("Latest Block:", myBlockchain.getLatestBlock());
 
+console.log("Adding new block...");
 myBlockchain.addBlock(
   new Block(1, new Date().toISOString(), [
     {
@@ -24,11 +26,5 @@ myBlockchain.addBlock(
   ])
 );
 
-console.log("Chain after adding blocks:");
+console.log("Blockchain Data:");
 console.log(JSON.stringify(myBlockchain, null, 2));
-console.log("Chain validity after adding blocks:", myBlockchain.isChainValid());
-
-myBlockchain.chain[1].transactions = [
-  { sender: "Eve", receiver: "Mallory", amount: 100 },
-];
-console.log("Chain validity after tampering:", myBlockchain.isChainValid());
