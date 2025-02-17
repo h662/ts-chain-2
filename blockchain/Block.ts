@@ -1,21 +1,21 @@
 import * as crypto from "crypto";
+import Transaction from "./Transaction";
 
 class Block {
   index: number;
   timestamp: string;
-  transactions: object[];
+  transactions: Transaction[];
   previousHash: string;
   hash: string;
   nonce: number;
 
   constructor(
     index: number,
-    timestamp: string,
-    transactions: object[],
+    transactions: Transaction[],
     previousHash: string = ""
   ) {
     this.index = index;
-    this.timestamp = timestamp;
+    this.timestamp = new Date().toISOString();
     this.transactions = transactions;
     this.previousHash = previousHash;
     this.nonce = 0;
