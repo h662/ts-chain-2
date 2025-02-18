@@ -62,7 +62,8 @@ class P2PNetwork {
         this.handleChainSync(data.chain!);
         break;
       case MessageType.TRANSACTION:
-        this.handleTransactionSync(data.transaction!);
+        // this.handleTransactionSync(data.transaction!);
+        console.log("Transaction syncronization is no longer supported.");
         break;
       default:
         console.error("Unknown message type:", data.type);
@@ -70,12 +71,14 @@ class P2PNetwork {
   }
 
   handleChainSync(chain: Block[]): void {
+    const newBlockchain = Blockchain.fromJSON({ chain });
+
     if (
       this.blockchain.isChainValid() &&
-      chain.length > this.blockchain.chain.length
+      newBlockchain.chain.length > this.blockchain.chain.length
     ) {
       console.log("Replacing blockchain with received chain");
-      this.blockchain.chain = chain;
+      this.blockchain.chain = newBlockchain.chain;
     } else {
       console.log(
         "Received chain is invalid or not longer than the current chain"
@@ -83,18 +86,18 @@ class P2PNetwork {
     }
   }
 
-  handleTransactionSync(transaction: Transaction): void {
-    this.blockchain.addTransaction(transaction);
-    console.log("Transaction added to the pool:", transaction);
-  }
+  // handleTransactionSync(transaction: Transaction): void {
+  //   this.blockchain.addTransaction(transaction);
+  //   console.log("Transaction added to the pool:", transaction);
+  // }
 
   broadcastChain(): void {
     this.broadcast({ type: MessageType.CHAIN, chain: this.blockchain.chain });
   }
 
-  broadcastTransaction(transaction: Transaction): void {
-    this.broadcast({ type: MessageType.TRANSACTION, transaction });
-  }
+  // broadcastTransaction(transaction: Transaction): void {
+  //   this.broadcast({ type: MessageType.TRANSACTION, transaction });
+  // }
 
   broadcast(message: BroadcastMessage): void {
     this.sockets.forEach((socket) => socket.send(JSON.stringify(message)));

@@ -84,6 +84,19 @@ class Blockchain {
 
     return true;
   }
+
+  static fromJSON(data: any): Blockchain {
+    const blockchain = new Blockchain();
+    blockchain.chain = data.chain.map((blockData: any) =>
+      Block.fromJSON(blockData)
+    );
+    blockchain.difficulty = data.difficulty;
+    blockchain.transactionPool = data.transactionPool
+      ? data.transactionPool.map((tx: any) => Transaction.fromJSON(tx))
+      : [];
+    blockchain.miningReward = data.miningReward;
+    return blockchain;
+  }
 }
 
 export default Blockchain;

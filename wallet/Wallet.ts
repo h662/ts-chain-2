@@ -20,6 +20,7 @@ class Wallet {
   }
 
   signTransaction(data: string): string {
+    console.log("wallet", data);
     const keyPair = ec.keyFromPrivate(this.privateKey, "hex");
     const hash = crypto.createHash("sha256").update(data).digest("hex");
     const signature = keyPair.sign(hash, "base64");

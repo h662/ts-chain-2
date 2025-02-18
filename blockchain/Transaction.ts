@@ -2,6 +2,7 @@ import Wallet from "../wallet/Wallet";
 
 class Transaction {
   sender: string | null;
+  senderPublicKey: string | null = null;
   receiver: string;
   amount: number;
   timestamp: string;
@@ -22,9 +23,10 @@ class Transaction {
   }
 
   signTransaction(wallet: Wallet): void {
-    if (wallet.publicKey !== this.sender) {
+    if (wallet.address !== this.sender) {
       throw new Error("Transaction signing is only allowed by the sender.");
     }
+    this.senderPublicKey = wallet.publicKey;
     const data = this.calculateHash();
     this.signature = wallet.signTransaction(data);
   }
@@ -34,8 +36,11 @@ class Transaction {
     if (!this.signature) {
       throw new Error("No signature in this transaction.");
     }
+    if (!this.senderPublicKey) {
+      throw new Error("No sender public key in this transaction.");
+    }
     return Wallet.verifySignature(
-      this.sender,
+      this.senderPublicKey,
       this.calculateHash(),
       this.signature
     );
@@ -44,6 +49,7 @@ class Transaction {
   calculateHash(): string {
     return JSON.stringify({
       sender: this.sender,
+      senderPublicKey: this.senderPublicKey,
       receiver: this.receiver,
       amount: this.amount,
       timestamp: this.timestamp,
