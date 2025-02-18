@@ -12,14 +12,17 @@ class Block {
   constructor(
     index: number,
     transactions: Transaction[],
-    previousHash: string = ""
+    previousHash: string = "",
+    hash: string = "",
+    nonce: number = 0,
+    timestamp: string = new Date().toISOString()
   ) {
     this.index = index;
-    this.timestamp = new Date().toISOString();
     this.transactions = transactions;
     this.previousHash = previousHash;
-    this.nonce = 0;
-    this.hash = this.calculateHash();
+    this.hash = hash;
+    this.nonce = nonce;
+    this.timestamp = timestamp;
   }
 
   calculateHash(): string {
@@ -44,6 +47,21 @@ class Block {
     }
 
     console.log(`Block mined: ${this.hash}`);
+  }
+
+  static fromJSON(data: any): Block {
+    const transactions = data.transactions.map((tx: any) =>
+      Transaction.fromJSON(tx)
+    );
+
+    return new Block(
+      data.index,
+      transactions,
+      data.previousHash,
+      data.hash,
+      data.nonce,
+      data.timestamp
+    );
   }
 }
 

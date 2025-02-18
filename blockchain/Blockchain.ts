@@ -76,6 +76,10 @@ class Blockchain {
         );
         return false;
       }
+
+      for (const tx of currentBlock.transactions) {
+        if (!tx.isValid()) return false;
+      }
     }
 
     return true;

@@ -7,11 +7,18 @@ class Transaction {
   timestamp: string;
   signature: string | null = null;
 
-  constructor(sender: string | null, receiver: string, amount: number) {
+  constructor(
+    sender: string | null,
+    receiver: string,
+    amount: number,
+    signature: string | null = null,
+    timestamp: string = new Date().toISOString()
+  ) {
     this.sender = sender;
     this.receiver = receiver;
     this.amount = amount;
-    this.timestamp = new Date().toISOString();
+    this.signature = signature;
+    this.timestamp = timestamp;
   }
 
   signTransaction(wallet: Wallet): void {
@@ -20,6 +27,18 @@ class Transaction {
     }
     const data = this.calculateHash();
     this.signature = wallet.signTransaction(data);
+  }
+
+  isValid(): boolean {
+    if (this.sender === null) return true;
+    if (!this.signature) {
+      throw new Error("No signature in this transaction.");
+    }
+    return Wallet.verifySignature(
+      this.sender,
+      this.calculateHash(),
+      this.signature
+    );
   }
 
   calculateHash(): string {
@@ -33,6 +52,16 @@ class Transaction {
 
   toString(): string {
     return JSON.stringify(this);
+  }
+
+  static fromJSON(data: any): Transaction {
+    return new Transaction(
+      data.sender,
+      data.receiver,
+      data.amount,
+      data.signature,
+      data.timestamp
+    );
   }
 }
 
