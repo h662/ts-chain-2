@@ -12,7 +12,7 @@ app.use(cors());
 app.use("/api", routes);
 
 app.get("/", (req, res) => {
-  res.json({ message: "Hello, Express!" });
+  return res.json({ message: "Hello, Express!" });
 });
 
 app.listen(PORT, () => {
