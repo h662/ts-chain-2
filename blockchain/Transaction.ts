@@ -1,10 +1,19 @@
 import Wallet from "../wallet/Wallet";
 
-class Transaction {
+export interface TransactionData {
   sender: string | null;
-  senderPublicKey: string | null = null;
   receiver: string;
   amount: number;
+  senderPublicKey: string | null;
+  timestamp: string;
+  signature: string | null;
+}
+
+class Transaction implements TransactionData {
+  sender: string | null;
+  receiver: string;
+  amount: number;
+  senderPublicKey: string | null;
   timestamp: string;
   signature: string | null = null;
 
@@ -12,12 +21,14 @@ class Transaction {
     sender: string | null,
     receiver: string,
     amount: number,
+    senderPublicKey: string | null = null,
     signature: string | null = null,
     timestamp: string = new Date().toISOString()
   ) {
     this.sender = sender;
     this.receiver = receiver;
     this.amount = amount;
+    this.senderPublicKey = senderPublicKey;
     this.signature = signature;
     this.timestamp = timestamp;
   }
@@ -56,15 +67,12 @@ class Transaction {
     });
   }
 
-  toString(): string {
-    return JSON.stringify(this);
-  }
-
-  static fromJSON(data: any): Transaction {
+  static fromJSON(data: TransactionData): Transaction {
     return new Transaction(
       data.sender,
       data.receiver,
       data.amount,
+      data.senderPublicKey,
       data.signature,
       data.timestamp
     );

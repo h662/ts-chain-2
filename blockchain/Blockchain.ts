@@ -1,17 +1,29 @@
 import Block from "./Block";
 import Transaction from "./Transaction";
 
-class Blockchain {
+export interface BlockchainData {
+  chain: Block[];
+  difficulty: number;
+  transactionPool: Transaction[];
+  miningReward: number;
+}
+
+class Blockchain implements BlockchainData {
   chain: Block[];
   difficulty: number;
   transactionPool: Transaction[];
   miningReward: number;
 
-  constructor() {
-    this.chain = [this.createGenesisBlock()];
-    this.difficulty = 3;
-    this.transactionPool = [];
-    this.miningReward = 50;
+  constructor(
+    chain: Block[] = [this.createGenesisBlock()],
+    difficulty: number = 3,
+    transactionPool: Transaction[] = [],
+    miningReward: number = 50
+  ) {
+    this.chain = chain;
+    this.difficulty = difficulty;
+    this.transactionPool = transactionPool;
+    this.miningReward = miningReward;
   }
 
   private createGenesisBlock(): Block {
@@ -85,7 +97,7 @@ class Blockchain {
     return true;
   }
 
-  static fromJSON(data: any): Blockchain {
+  static fromJSON(data: BlockchainData): Blockchain {
     const blockchain = new Blockchain();
     blockchain.chain = data.chain.map((blockData: any) =>
       Block.fromJSON(blockData)

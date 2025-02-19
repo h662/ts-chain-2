@@ -1,7 +1,16 @@
 import * as crypto from "crypto";
 import Transaction from "./Transaction";
 
-class Block {
+export interface BlockData {
+  index: number;
+  timestamp: string;
+  transactions: Transaction[];
+  previousHash: string;
+  hash: string;
+  nonce: number;
+}
+
+class Block implements BlockData {
   index: number;
   timestamp: string;
   transactions: Transaction[];
@@ -49,8 +58,8 @@ class Block {
     console.log(`Block mined: ${this.hash}`);
   }
 
-  static fromJSON(data: any): Block {
-    const transactions = data.transactions.map((tx: any) =>
+  static fromJSON(data: BlockData): Block {
+    const transactions = data.transactions.map((tx) =>
       Transaction.fromJSON(tx)
     );
 

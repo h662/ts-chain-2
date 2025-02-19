@@ -71,7 +71,12 @@ class P2PNetwork {
   }
 
   handleChainSync(chain: Block[]): void {
-    const newBlockchain = Blockchain.fromJSON({ chain });
+    const newBlockchain = Blockchain.fromJSON({
+      chain,
+      difficulty: this.blockchain.difficulty,
+      transactionPool: this.blockchain.transactionPool,
+      miningReward: this.blockchain.miningReward,
+    });
 
     if (
       this.blockchain.isChainValid() &&
