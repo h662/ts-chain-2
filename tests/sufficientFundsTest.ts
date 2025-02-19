@@ -15,11 +15,11 @@ blockchain.addTransaction(tx);
 
 blockchain.minePendingTransactions(aliceWallet.address);
 
-console.log(
-  "Balance of Alice:",
-  blockchain.getBalanceOfAddress(aliceWallet.address)
-);
-console.log(
-  "Balance of Bob:",
-  blockchain.getBalanceOfAddress(bobWallet.address)
-);
+// console.log(
+//   "Balance of Alice:",
+//   blockchain.getBalanceOfAddress(aliceWallet.address)
+// );
+// console.log(
+//   "Balance of Bob:",
+//   blockchain.getBalanceOfAddress(bobWallet.address)
+// );

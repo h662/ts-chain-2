@@ -6,6 +6,7 @@ import Block from "../blockchain/Block";
 enum MessageType {
   CHAIN = "CHAIN",
   TRANSACTION = "TRANSACTION",
+  REQUEST_CHAIN = "REQUEST_CHAIN",
 }
 
 interface BroadcastMessage {
@@ -64,6 +65,9 @@ class P2PNetwork {
       case MessageType.TRANSACTION:
         // this.handleTransactionSync(data.transaction!);
         console.log("Transaction syncronization is no longer supported.");
+        break;
+      case MessageType.REQUEST_CHAIN:
+        this.broadcastChain();
         break;
       default:
         console.error("Unknown message type:", data.type);

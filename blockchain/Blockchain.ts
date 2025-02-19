@@ -52,6 +52,8 @@ class Blockchain implements BlockchainData {
     );
     this.transactionPool.push(rewardTransaction);
 
+    const startTime = Date.now();
+
     const newBlock = new Block(
       this.chain.length,
       this.transactionPool,
@@ -62,6 +64,12 @@ class Blockchain implements BlockchainData {
     newBlock.mineBlock(this.difficulty);
 
     this.chain.push(newBlock);
+
+    const endTime = Date.now();
+    const timeTaken = endTime - startTime;
+
+    this.difficulty = this.adjustDifficulty(this.difficulty, timeTaken);
+
     this.transactionPool = [];
   }
 
@@ -101,6 +109,16 @@ class Blockchain implements BlockchainData {
     }
 
     return true;
+  }
+
+  adjustDifficulty(currentDifficulty: number, timeTaken: number): number {
+    const targetTime = 10000;
+    if (timeTaken < targetTime / 2) {
+      return currentDifficulty + 1;
+    } else if (timeTaken > targetTime * 2) {
+      return currentDifficulty - 1;
+    }
+    return currentDifficulty;
   }
 
   static fromJSON(data: BlockchainData): Blockchain {
