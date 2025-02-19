@@ -3,7 +3,13 @@ import * as crypto from "crypto";
 
 const ec = new EC("secp256k1");
 
-class Wallet {
+export interface WalletData {
+  privateKey: string;
+  publicKey: string;
+  address: string;
+}
+
+class Wallet implements WalletData {
   privateKey: string;
   publicKey: string;
   address: string;
