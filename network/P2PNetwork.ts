@@ -112,6 +112,22 @@ class P2PNetwork {
     this.sockets.forEach((socket) => socket.send(JSON.stringify(message)));
     console.log(`Broadcated message: ${JSON.stringify(message)}`);
   }
+
+  autoConnectPeers(peers: string[]): void {
+    peers.forEach((peer) => {
+      if (!this.sockets.find((socket) => socket.url === peer)) {
+        this.connectToPeer(peer);
+      }
+    });
+  }
+
+  checkNodeHealth(): void {
+    this.sockets = this.sockets.filter(
+      (socket) => socket.readyState === WebSocket.OPEN
+    );
+
+    console.log(`Active connections: ${this.sockets.length}`);
+  }
 }
 
 export default P2PNetwork;
