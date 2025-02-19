@@ -35,6 +35,12 @@ class Blockchain implements BlockchainData {
   }
 
   addTransaction(transaction: Transaction): void {
+    if (transaction.sender !== null) {
+      const balance = this.getBalanceOfAddress(transaction.sender);
+      if (balance < transaction.amount) {
+        throw new Error("Insufficient funds for transaction.");
+      }
+    }
     this.transactionPool.push(transaction);
   }
 
