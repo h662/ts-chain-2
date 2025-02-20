@@ -41,6 +41,8 @@ router.get("/wallet/:address", (req, res) => {
 router.post("/transaction", (req, res) => {
   const { sender, receiver, amount } = req.body;
 
+  console.log(typeof amount);
+
   if (!sender || !receiver || typeof amount !== "number" || amount <= 0) {
     return res.status(400).json({ error: "Invalid transaction data" });
   }

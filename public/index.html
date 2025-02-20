@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blockchain Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Blockchain Dashboard</h1>
+    </header>
+    <main>
+      <section id="wallets">
+        <h2>Create Wallet</h2>
+        <button id="create-wallet">Create Wallet</button>
+        <div id="wallets-list"></div>
+      </section>
+
+      <section id="blocks">
+        <h2>Blockchain</h2>
+        <button id="fetch-blocks">Fetch Blocks</button>
+        <div id="blocks-list"></div>
+      </section>
+
+      <section id="transactions">
+        <h2>Create Transaction</h2>
+        <input id="sender" type="text" placeholder="Sender Address" />
+        <input id="receiver" type="text" placeholder="Receiver Address" />
+        <input id="amount" type="number" placeholder="Amount" />
+        <button id="create-transaction">Submit Transaction</button>
+        <div id="transactions-status"></div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
