@@ -72,4 +72,17 @@ router.get("/transactions", (_, res) => {
   return res.json(blockchain.transactionPool);
 });
 
+router.post("/mine", (req, res) => {
+  const { minerAddress } = req.body;
+  blockchain.minePendingTransactions(minerAddress);
+  const latestBlock = blockchain.getLatestBlock();
+  return res.json(latestBlock);
+});
+
+router.get("/balance/:address", (req, res) => {
+  const { address } = req.params;
+  const balance = blockchain.getBalanceOfAddress(address);
+  res.json({ address, balance });
+});
+
 export default router;
